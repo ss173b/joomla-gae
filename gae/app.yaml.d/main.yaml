@@ -1,0 +1,11 @@
+# Handler for GAE main.php file
+
+handlers:
+# Regular expression of uri to match for this script
+- url: .*
+# Path to script to execute for this uri
+  script: gae/main.php
+# Use HTTPS: never, always, or optional
+  secure: never
+# Google App Logon config: optional, required, admin [required and must be app admin]
+  login: optional

@@ -4,12 +4,17 @@ runtime: php
 api_version: 1
 threadsafe: true
 
-handlers:
+#handlers:
 # Regular expression of uri to match for this script
-- url: .*
+#- url: .*
 # Path to script to execute for this uri
-  script: gae/main.php
+#  script: gae/main.php
 # Use HTTPS: never, always, or optional
-  secure: never
+#  secure: never
 # Google App Logon config: optional, required, admin [required and must be app admin]
-  login: optional
+#  login: optional
+
+# For maintenability, handlers are kept in seperate files and included here.  All handlers should be placed in the gae/app.yaml.d subdirectory and then included here
+
+includes:
+- gae/app.yaml.d/main.yaml
