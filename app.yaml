@@ -19,5 +19,9 @@ threadsafe: true
 includes:
 # phpinfo page
 - gae/app.yaml.d/info.yaml
+# various function, class, header dumpage page
+- gae/app.yaml.d/dump.yaml
+# APC cache info
+- gae/app.yaml.d/apc.yaml
 # gae main page
 - gae/app.yaml.d/main.yaml

@@ -1,0 +1,12 @@
+# Handler for GAE dump.php file
+
+handlers:
+# Regular expression of uri to match for this script, in this case http://gaeapp/dump
+- url: /dump
+# Path to script to execute for this uri
+  script: gae/dump.php
+# Use HTTPS: never, always, or optional.
+# Set to always since I only want app engine admins to be able to use dump
+  secure: always
+# Google App Logon config: optional, required, admin [required and must be app admin]
+  login: admin
