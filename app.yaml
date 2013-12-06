@@ -17,4 +17,7 @@ threadsafe: true
 # For maintenability, handlers are kept in seperate files and included here.  All handlers should be placed in the gae/app.yaml.d subdirectory and then included here
 
 includes:
+# phpinfo page
+- gae/app.yaml.d/info.yaml
+# gae main page
 - gae/app.yaml.d/main.yaml

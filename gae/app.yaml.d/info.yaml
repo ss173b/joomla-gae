@@ -1,0 +1,12 @@
+# Handler for GAE info.php file
+
+handlers:
+# Regular expression of uri to match for this script, in this case http://gaeapp/phpinfo
+- url: /phpinfo
+# Path to script to execute for this uri
+  script: gae/info.php
+# Use HTTPS: never, always, or optional.
+# Set to always since I only want app engine admins to be able to use info
+  secure: always
+# Google App Logon config: optional, required, admin [required and must be app admin]
+  login: admin
