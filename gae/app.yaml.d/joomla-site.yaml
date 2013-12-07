@@ -1,0 +1,22 @@
+# Handler for Joomla Frontend website
+
+handlers:
+
+- url: /media/(.*\.(css$|js$|ico$|jpg$|png$|gif$))
+  static_files: joomla-cms/media/\1
+  upload: joomla-cms/media/(.*\.(css$|js$|ico$|jpg$|png$|gif$))
+  application_readable: true
+
+- url: /templates/(.*\.(css$|js$|ico$|jpg$|png$|gif$))
+  static_files: joomla-cms/templates/\1
+  upload: joomla-cms/templates/(.*\.(css$|js$|ico$|jpg$|png$|gif$))
+  application_readable: true
+
+# Regular expression of uri to match for this script
+- url: .*
+# Path to script to execute for this uri
+  script: gae/joomla/site.php
+# Use HTTPS: never, always, or optional
+  secure: never
+# Google App Logon config: optional, required, admin [required and must be app admin]
+  login: optional

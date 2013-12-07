@@ -23,5 +23,9 @@ includes:
 - gae/app.yaml.d/dump.yaml
 # APC cache info
 - gae/app.yaml.d/apc.yaml
-# gae main page
-- gae/app.yaml.d/main.yaml
+# joomla install
+- gae/app.yaml.d/joomla-install.yaml
+# joomla admin
+- gae/app.yaml.d/joomla-admin.yaml
+# joomla site
+- gae/app.yaml.d/joomla-site.yaml

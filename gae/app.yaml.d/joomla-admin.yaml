@@ -1,0 +1,17 @@
+# Handler for Joomla Admin module
+
+handlers:
+- url: /administrator/templates/(.*\.(css$|js$|ico$|jpg$|png$|gif$))
+  static_files: joomla-cms/administrator/templates/\1
+  upload: joomla-cms/administrator/templates/(.*\.(css$|js$|ico$|jpg$|png$|gif$))
+  application_readable: true
+  secure: always
+
+# Regular expression of uri to match for this script
+- url: /administrator/.*
+# Path to script to execute for this uri
+  script: gae/joomla/admin.php
+# Use HTTPS: never, always, or optional
+  secure: always
+# Google App Logon config: optional, required, admin [required and must be app admin]
+  login: admin
