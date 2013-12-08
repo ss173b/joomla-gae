@@ -18,5 +18,8 @@ JLoader::registerPrefix('Installation', GAEINSTALLATIONLIBS, false, true);
 // By setting prepend to true, we force our directory to be checked first
 JLoader::registerPrefix('J', GAEJOOMLALIBS, false, true);
 
+//Some file checks are relative to the current working directory, so set to where it would normally be
+chdir (JOOMLACMSINSTALLDIR);
+
 // Execute install file
 require_once JOOMLACMSINSTALLFILE;

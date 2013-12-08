@@ -1,0 +1,53 @@
+see Original Notes for now to come up to date with being ready to install Joomla.
+
+Ready to install Joomla:
+
+Ok, ready to install Joomla.  We need a database at this point.  If we followed a standard practice, we would install everything using a local database, and then migrate the database over along with the files.
+
+At this point I don't have any need for a "local" database, so instead I am going to use a nifty feature of Google Cloud SQL - we can authorize remote access to the database - so I can install Joomla on my local filesystem and use the remote server info.
+
+Select your project from:
+https://cloud.google.com/console#/project
+
+Go to "Cloud SQL"
+Enter an identifier for the database: "joomla"
+Tier: I like to make D1 my minimum
+Billing Plan: per use
+Preferred Localtion: "Follow App Engine App"  <-- your database server will run in the same data center that your app engine app is running, minimizing latency
+Followed App Engine App: name of your app engine app to follow
+Backup Window: I leave it to the default
+Replication: Synchronous is fine
+Assign IP Address:
+You only need an ip address for access outside of GAE  - including remote access from our dev system.  Having an IP address costs .01/hour when the app engine is not running, so it is a constant charge.  We only need it when working remotely and we can release it when we are not - so it's not really an issue.
+
+
+Click "Confirm"
+
+Wait for the instance to finish being created.
+Open the instance to get the settings:
+From the summary tab is your ip address, copy this 173.194.110.227
+
+Go to Access Control:
+set the root password for the database
+Go to "Authorized Networks", add a network[your ip address] so you can connect. If you don't know it, you can look it up at http://www.whatsmyip.org/
+
+
+Test your connection. I like to use Navicat:  Connect to the system and ensure everything works.  Once connected via Navicat, create a database for your joomla website.  I choose charector setting utf8, utf8 general ci
+
+Now go through the standard Joomla Install:
+
+On the Database tab,
+Database type: mysqli
+Host name enter the ip address of the cloud sql instance
+username: root
+password: password you set through the cloud console
+database name: database name you created previously
+table prefix: go ahead and take the default, or change it if you like
+
+Final page:
+Don't email the configuration, otherwise everything else is fine so go ahead
+
+When installation is complete:
+Because this was installed from the source repository, you do not need to remove the installation folder when completed.  Since the installation folder is secured by GAE, I find it easier to leave it
+
+go to appl.yaml and bump/change the version identifier
