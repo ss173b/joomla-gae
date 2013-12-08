@@ -23,6 +23,8 @@ includes:
 - gae/app.yaml.d/dump.yaml
 # APC cache info
 - gae/app.yaml.d/apc.yaml
+# phpinfo page
+- gae/app.yaml.d/test.yaml
 # joomla install
 - gae/app.yaml.d/joomla-install.yaml
 # joomla admin

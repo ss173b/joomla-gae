@@ -2,6 +2,11 @@
 
 handlers:
 
+- url: /(.*\.(css$|js$|ico$|jpg$|png$|gif$))
+  static_files: joomla-cms/\1
+  upload: joomla-cms/(.*\.(css$|js$|ico$|jpg$|png$|gif$))
+  application_readable: true
+
 - url: /media/(.*\.(css$|js$|ico$|jpg$|png$|gif$))
   static_files: joomla-cms/media/\1
   upload: joomla-cms/media/(.*\.(css$|js$|ico$|jpg$|png$|gif$))
@@ -12,7 +17,7 @@ handlers:
   upload: joomla-cms/templates/(.*\.(css$|js$|ico$|jpg$|png$|gif$))
   application_readable: true
 
-# Regular expression of uri to match for this script
+# Regular expression of uri to match everything else
 - url: .*
 # Path to script to execute for this uri
   script: gae/joomla/site.php

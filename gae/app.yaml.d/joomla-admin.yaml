@@ -7,6 +7,15 @@ handlers:
   application_readable: true
   secure: always
 
+# Bare admin without a trailing slash
+- url: /administrator
+# Path to script to execute for this uri
+  script: gae/joomla/admin.php
+# Use HTTPS: never, always, or optional
+  secure: always
+# Google App Logon config: optional, required, admin [required and must be app admin]
+  login: admin
+
 # Regular expression of uri to match for this script
 - url: /administrator/.*
 # Path to script to execute for this uri
