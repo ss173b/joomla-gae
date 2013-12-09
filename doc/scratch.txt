@@ -1,0 +1,16 @@
+[SCRIPT_FILENAME] => gae/joomla/admin.php
+[REQUEST_URI] => /administrator/index.php?option=com_config
+[PHP_SELF] => /administrator/index.php
+[SCRIPT_NAME] => /administrator/index.php
+
+env:
+[PATH_INFO] => /administrator/index.php
+[SCRIPT_FILENAME] => gae/joomla/admin.php
+[REQUEST_URI] => /administrator/index.php?option=com_config
+
+REQUEST
+[option] => com_config
+    [dev_appserver_login] => "test@example.com:True:185804764220139124118"
+    [dfced3b8ef8245f626640a33bb1d908f] => 97de554fb8729fb6fec706a9770a2cb5
+    [fc0dc1ca2cb6bc6f27104dfe2e2a2e67] => 4512024629e07d869edd12e76d6f23a8
+    [a5740da989baea21404525efec15d71f] => 9818b690ac392ea790bd95e308fefff0
