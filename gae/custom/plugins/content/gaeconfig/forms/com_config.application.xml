@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+
+
+    <fieldset
+            name="database"
+            label="CONFIG_DATABASE_SETTINGS_LABEL">
+        <field
+                name="dbtype"
+                type="databaseconnection"
+                label="COM_CONFIG_FIELD_DATABASE_TYPE_LABEL"
+                description="COM_CONFIG_FIELD_DATABASE_TYPE_DESC"
+                supported="mysql,mysqli,postgresql,sqlsrv,sqlazure,gaemysql,gaemysqli"
+                filter="string" />
+
+
+	</fieldset>
+
+
+    <fieldset
+            name="session"
+            label="CONFIG_SESSION_SETTINGS_LABEL">
+
+        <field
+                name="session_handler"
+                type="sessionhandler"
+                default="none"
+                label="COM_CONFIG_FIELD_SESSION_HANDLER_LABEL"
+                description="COM_CONFIG_FIELD_SESSION_HANDLER_DESC"
+                required="true"
+                filter="word" />
+    </fieldset>
+
+</form>

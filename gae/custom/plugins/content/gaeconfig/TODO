@@ -1,0 +1,16 @@
+Disable the use of files for caching
+
+Enable the use of Google Cloud Storage for caching.
+
+Enable the use of Google Cloud Storage for sessions.
+
+Enable the use of Google Datastore for caching
+
+Enable the use of Google Datastore for sessions.
+
+Disable the use of APC for sessions
+Disable the use of APC for caching
+
+Enable the use of GAE APC for sessions with appropriate warning
+
+Enable the use of GAE APC for caching with appropriate warning
