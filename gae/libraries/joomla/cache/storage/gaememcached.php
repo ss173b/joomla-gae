@@ -30,6 +30,9 @@ class JCacheStorageGaememcached extends JCacheStorageMemcached
 	 */
 	protected function getConnection()
 	{
+
+
+
 		if (class_exists('Memcached') != true)
 		{
 			return false;
@@ -79,13 +82,7 @@ class JCacheStorageGaememcached extends JCacheStorageMemcached
 	 */
 	public static function isSupported()
 	{
-		if ( class_exists('Memcached') != true)
-		{
-			return false;
-		}
-
-
-			return true;
+		return class_exists('Memcached');
 
 	}
 

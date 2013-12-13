@@ -1,0 +1,24 @@
+i've been hacking around with getting the Joomla! CMS to install under Google App Engine.
+
+One thing I ran into is that when connecting up to a GAE Cloud SQL server the connection format is different.
+
+For the app that is running on GAE, you have to specify a socket instead of a host and port - and unfortunately GAE's socket naming convention is problematic.  For example, my socket is:
+'/cloudsql/overnumerousness-site:joomla'
+
+Note that there is a colon(:) in the name of the socket which causes problems as the Joomla MySQLI driver uses the colon as a separator - so it can't process that string properly.
+
+In addition, when connecting to the Cloud SQL database from my local dev server, I need to use the ip address and port number.
+
+Thanks to autoloading structure used by Joomla and the way GAE routes requests, it is fairly easy to handle this.
+
+First I created a new database driver, JDatabaseDriverGaemysqli which extends JDatabaseDriverMysqli and overrides the driver name[gaemysqli] and uses a custom connect method where I embed a simple check to see if it is running from GAE or from my local.  I store the database server name in configuration.php as ipaddress|port|socket so I can parse it using | instead of : and set the appropriate connection variables.
+
+I create that driver file in my own joomla libraries folder: gae/libraries/joomla/database/driver - so all I need to do is call JLoader::registerPrefix('J', GAEJOOMLALIBS, false, true);
+in my GAE script before loading the appropriate index.php file.  This lets me push my custom files/classes to the head of the line for autoloading.
+
+Since Joomla! doesn't need to do any checking of "valid" database drivers when it runs, it just uses whatever class name was defined in configuration.php - it either works or it doesn't.  So for 95% of the Joomla code, this is all I need to do.
+
+Then I hit the 5% of the code where this fails.  :-)  The Joomla Configuration program has a number of hiccups:
+1) It filters database drivers, cache engines, and session storage engines so only the ones from the files stored in the
+
+https://github.com/garyamort/joomla-gae/tree/overnumerousness/gae/custom/plugins/content/gaeconfig

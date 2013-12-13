@@ -16,7 +16,7 @@ defined('JPATH_PLATFORM') or die;
  * @subpackage  Session
  * @since       11.1
  */
-class JSessionStorageGaememcached extends JSessionStorage
+class JSessionStorageGaememcached extends JSessionStorageMemcached
 {
 	/**
 	 * Constructor
@@ -57,7 +57,7 @@ class JSessionStorageGaememcached extends JSessionStorage
 	 */
 	public function register()
 	{
-
+		ini_set('session.save_handler', 'memcached');
 	}
 
 	/**
