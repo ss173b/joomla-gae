@@ -175,7 +175,23 @@ class JCacheStorageGaeapc extends JCacheStorageApc
 	 */
 	public static function isSupported()
 	{
-		return extension_loaded('apc');
+		/**
+		 *  Google App Engine Server Software is either
+		 * Development or
+		 * Google App Engine
+		 */
+		if ( isset($_SERVER['SERVER_SOFTWARE']) )
+		{
+			$beginsWith = substr($_SERVER['SERVER_SOFTWARE'],0,11);
+			if ( ($beginsWith == 'Development') ||
+				( $beginsWith == 'Google App '))
+			{
+				// Gaememcached is supported if the Memcached class exists
+				return extension_loaded('apc');
+			}
+		}
+		return false;
+
 	}
 
 	/**

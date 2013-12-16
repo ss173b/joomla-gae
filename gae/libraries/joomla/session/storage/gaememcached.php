@@ -69,6 +69,22 @@ class JSessionStorageGaememcached extends JSessionStorageMemcached
 	 */
 	static public function isSupported()
 	{
-		return (class_exists('Memcached'));
+		/**
+		 *  Google App Engine Server Software is either
+		 * Development or
+		 * Google App Engine
+		 */
+		if ( isset($_SERVER['SERVER_SOFTWARE']) )
+		{
+			$beginsWith = substr($_SERVER['SERVER_SOFTWARE'],0,11);
+			if ( ($beginsWith == 'Development') ||
+				( $beginsWith == 'Google App '))
+			{
+				// Gaememcached is supported if the Memcached class exists
+				return class_exists('Memcached');
+			}
+		}
+		return false;
+
 	}
 }

@@ -2,6 +2,8 @@
 
 // GAE requires this function call in order to load the local xml files
 libxml_disable_entity_loader(false);
+error_reporting(E_ALL);
+ini_set('display_errors', '1');
 
 // Load defined constants for Joomla under GAE
 require_once(__DIR__ . '/defines.php');
@@ -22,6 +24,7 @@ JLoader::registerPrefix('J', GAEJOOMLALIBS, false, true);
 
 //Some file checks are relative to the current working directory, so set to where it would normally be
 chdir (JOOMLACMSADMINDIR);
-
+error_reporting(E_ALL);
+ini_set('display_errors', '1');
 // Execute install file
 require_once(JOOMLACMSADMINFILE);
