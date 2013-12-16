@@ -4,15 +4,6 @@ runtime: php
 api_version: 1
 threadsafe: true
 
-# Skip some files/folders
-# Any dir that matches any of the regular expression is omitted from the list of files to upload when the application is uploaded.
-skip_files:
-- ^(.*/)?#.*#$
-- ^(.*/)?.*~$
-- ^(.*/)?.*/RCS/.*$
-- ^(.*/)?\..*$
-- ^(.*/)?\..*$
-
 #handlers:
 # Regular expression of uri to match for this script
 #- url: .*
