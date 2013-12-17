@@ -1,0 +1,39 @@
+# Media file handlers, must be the first file included so nothing else
+# overrides them
+
+handlers:
+
+# redirect all favicon requests
+- url: /favicon.ico
+  static_files: favicon.ico
+  upload: joomla-cms/templates/protostar/favicon.ico
+  application_readable: true
+
+- url: /installation/template/(.*\.(css$|js$|ico$|jpg$|png$|gif$|woff$|ttf$|svg$))
+  static_files: joomla-cms/installation/template/\1
+  upload: joomla-cms/installation/template/(.*\.(css$|js$|ico$|jpg$|png$|gif$|woff$|ttf$|svg$))
+  application_readable: true
+  secure: always
+
+- url: /administrator/templates/(.*\.(css$|js$|ico$|jpg$|png$|gif$|woff$|ttf$|svg$))
+  static_files: joomla-cms/administrator/templates/\1
+  upload: joomla-cms/administrator/templates/(.*\.(css$|js$|ico$|jpg$|png$|gif$|woff$|ttf$|svg$))
+  application_readable: true
+  secure: always
+
+- url: /media/(.*\.(css$|js$|ico$|jpg$|png$|gif$|woff$|ttf$|svg$))
+  static_files: joomla-cms/media/\1
+  upload: joomla-cms/media/(.*\.(css$|js$|ico$|jpg$|png$|gif$|woff$|ttf$|svg$))
+  application_readable: true
+
+- url: /templates/(.*\.(css$|js$|ico$|jpg$|png$|gif$|woff$|ttf$|svg$))
+  static_files: joomla-cms/templates/\1
+  upload: joomla-cms/templates/(.*\.(css$|js$|ico$|jpg$|png$|gif$|woff$|ttf$|svg$))
+  application_readable: true
+
+- url: /(.*\.(css$|js$|ico$|jpg$|png$|gif$|woff$|ttf$|svg$))
+  static_files: joomla-cms/\1
+  upload: joomla-cms/(.*\.(css$|js$|ico$|jpg$|png$|gif$|woff$|ttf$|svg$))
+  application_readable: true
+
+

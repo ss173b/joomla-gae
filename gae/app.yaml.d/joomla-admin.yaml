@@ -1,32 +1,21 @@
 # Handler for Joomla Admin module
 
 handlers:
-- url: /administrator/templates/(.*\.(css$|js$|ico$|jpg$|png$|gif$))
-  static_files: joomla-cms/administrator/templates/\1
-  upload: joomla-cms/administrator/templates/(.*\.(css$|js$|ico$|jpg$|png$|gif$))
-  application_readable: true
-  secure: always
 
-
-- url: /(.*\.(css$|js$|ico$|jpg$|png$|gif$))
-  static_files: joomla-cms/\1
-  upload: joomla-cms/(.*\.(css$|js$|ico$|jpg$|png$|gif$))
-  application_readable: true
-
-- url: /media/(.*\.(css$|js$|ico$|jpg$|png$|gif$))
-  static_files: joomla-cms/media/\1
-  upload: joomla-cms/media/(.*\.(css$|js$|ico$|jpg$|png$|gif$))
-  application_readable: true
-
-- url: /templates/(.*\.(css$|js$|ico$|jpg$|png$|gif$))
-  static_files: joomla-cms/templates/\1
-  upload: joomla-cms/templates/(.*\.(css$|js$|ico$|jpg$|png$|gif$))
-  application_readable: true
 
 # Match http://domain/administrator or http://domain/administrator/
-# also match any text after administrator such as http://domain/administrator/stuff
-# Will not match http://domain.com/administratorwithtext
-- url: /administrator(/.*)?
+# and redirect them to the index.php route
+- url: /administrator(/)?
+# Path to script to execute for this uri
+  script: gae/redirect/admin.php
+# Use HTTPS: never, always, or optional
+  secure: always
+# Google App Logon config: optional, required, admin [required and must be app admin]
+  login: admin
+
+
+# Match http://domain/administrator/index.php with possible SEF and/or query params
+- url: /administrator/index.php(/.*)?(\?.*)?
 # Path to script to execute for this uri
   script: gae/joomla/admin.php
 # Use HTTPS: never, always, or optional

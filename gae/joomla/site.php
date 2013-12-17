@@ -1,25 +1,5 @@
 <?php
-if (
-(strpos($_SERVER['REQUEST_URI'], '/index.php/') !== 0)
-&& (strpos($_SERVER['REQUEST_URI'], '/index.php') !== 0)
-&& false
-)
-{
-	$uri = $_SERVER['REQUEST_URI'];
-	$targetUri = '/index.php/';
-	$sourceIndex= '/index.php';
 
-
-	$redirectUri = $targetUri;
-	// Convert administrator with slash to administrator/index.php
-	if (strpos($uri, $sourceIndex) === 0)
-	{
-		$redirectUri = $redirectUri . substr($uri, strlen($sourceIndex));
-	}
-
-	header( 'Location: '.$redirectUri ) ;
-	exit();
-}
 // GAE requires this function call in order to load the local xml files
 libxml_disable_entity_loader(false);
 

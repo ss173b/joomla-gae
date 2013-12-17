@@ -17,6 +17,9 @@ threadsafe: true
 # For maintenability, handlers are kept in seperate files and included here.  All handlers should be placed in the gae/app.yaml.d subdirectory and then included here
 
 includes:
+# Media file paths have to be placed first
+- gae/app.yaml.d/joomla-media.yaml
+
 # phpinfo page
 - gae/app.yaml.d/info.yaml
 # various function, class, header dumpage page
