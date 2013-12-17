@@ -2,7 +2,7 @@
 
 handlers:
 # Regular expression of uri to match for this script, in this case http://gaeapp/dump
-- url: /dump
+- url: /dump(.*?)
 # Path to script to execute for this uri
   script: gae/dump.php
 # Use HTTPS: never, always, or optional.

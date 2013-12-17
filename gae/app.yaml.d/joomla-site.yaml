@@ -18,10 +18,10 @@ handlers:
   application_readable: true
 
 # Regular expression of uri to match everything else
-#- url: .*
+- url: (.*?)
 # Path to script to execute for this uri
-#  script: gae/joomla/site.php
+  script: gae/joomla/site.php
 # Use HTTPS: never, always, or optional
-#  secure: never
+  secure: never
 # Google App Logon config: optional, required, admin [required and must be app admin]
-#  login: optional
+  login: optional

@@ -9,8 +9,10 @@ handlers:
   secure: always
 
 
-# Regular expression of uri to match for this script
-- url: /installation/.*
+# Match http://domain/installation or http://domain/installation/
+# also match any text after installation such as http://domain/installation/stuff
+# Will not match http://domain.com/installationwithtext
+- url: /installation(/.*)?
 # Path to script to execute for this uri
   script: gae/joomla/install.php
 # Use HTTPS: never, always, or optional

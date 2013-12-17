@@ -1,4 +1,23 @@
 <?php
+if ( strpos($_SERVER['REQUEST_URI'], '/installation/index.php') !== 0)
+{
+	$uri = $_SERVER['REQUEST_URI'];
+	$targetUri = '/installation/index.php';
+	$sourceInstall = '/installation';
+	$sourceInstallSlash = $sourceInstall .'/';
+
+
+	// Convert administrator with slash to administrator/index.php
+	if (strpos($uri, $sourceAdminSlash) === 0)
+	{
+		$redirectUri = $targetUri . substr($uri, strlen($sourceInstallSlash));
+	} else {
+		$redirectUri = $targetUri . substr($uri, strlen($sourceInstall));
+	}
+
+	header( 'Location: '.$redirectUri ) ;
+	exit();
+}
 
 // GAE requires this function call in order to load the local xml files
 libxml_disable_entity_loader(false);
