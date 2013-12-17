@@ -7,19 +7,43 @@
  */
 
 // Calculate all our paths relative to this files path
-define('JOOMLADEFINEDIR',__DIR__);
-define('GAEDIR', dirname(JOOMLADEFINEDIR));
-define('GAELIBS', GAEDIR . '/libraries');
-define('GAEINSTALLATIONLIBS', GAELIBS . '/installation');
-define('GAEJOOMLALIBS', GAELIBS . '/joomla');
-define('GAEAPPDIR', dirname(GAEDIR));
-define('JOOMLACMSSITEDIR', GAEAPPDIR.'/joomla-cms');
-define('JOOMLACMSADMINDIR', JOOMLACMSSITEDIR.'/administrator');
-define('JOOMLACMSINSTALLDIR', JOOMLACMSSITEDIR.'/installation');
-define('JOOMLACMSSITEFILE', JOOMLACMSSITEDIR.'/index.php');
-define('JOOMLACMSADMINFILE', JOOMLACMSADMINDIR.'/index.php');
+define('JOOMLADEFINEDIR',      __DIR__);
+define('GAEDIR',               dirname(JOOMLADEFINEDIR));
+define('GAELIBS',              GAEDIR . '/libraries');
+define('GAEINSTALLATIONLIBS',  GAELIBS . '/installation');
+define('GAEJOOMLALIBS',        GAELIBS . '/joomla');
+define('GAEAPPDIR',            dirname(GAEDIR));
+define('JOOMLACMSSITEDIR',     GAEAPPDIR.'/joomla-cms');
+define('JOOMLACMSADMINDIR',    JOOMLACMSSITEDIR.'/administrator');
+define('JOOMLACMSINSTALLDIR',  JOOMLACMSSITEDIR.'/installation');
+define('JOOMLACMSSITEFILE',    JOOMLACMSSITEDIR.'/index.php');
+define('JOOMLACMSADMINFILE',   JOOMLACMSADMINDIR.'/index.php');
 define('JOOMLACMSINSTALLFILE', JOOMLACMSINSTALLDIR.'/index.php');
 
 
-// Set Jexec
-define('_JEXEC', 1);
+// Prevent joomla from loading standards defines file and allows for overriding JPATH_BASE
+define('_JDEFINES', 1);
+
+// Register custom JPATH_BASE
+if (defined('SET_JPATH_BASE'))
+	define('JPATH_BASE', constant(SET_JPATH_BASE));
+else
+	define('JPATH_BASE', realpath(JOOMLACMSSITEDIR));
+
+// Global definitions
+$parts = explode(DIRECTORY_SEPARATOR, JOOMLACMSSITEDIR);
+
+//Defines.
+define('JPATH_ROOT',          implode(DIRECTORY_SEPARATOR, $parts));
+define('JPATH_SITE',          JPATH_ROOT);
+define('JPATH_CONFIGURATION', JPATH_ROOT);
+define('JPATH_ADMINISTRATOR', JPATH_ROOT . '/administrator');
+define('JPATH_LIBRARIES',     JPATH_ROOT . '/libraries');
+define('JPATH_PLUGINS',       JPATH_ROOT . '/plugins');
+define('JPATH_INSTALLATION',  JPATH_ROOT . '/installation');
+define('JPATH_THEMES',        JPATH_BASE . '/templates');
+define('JPATH_CACHE',         JPATH_BASE . '/cache');
+define('JPATH_MANIFESTS',     JPATH_ADMINISTRATOR . '/manifests');
+
+// Loader requires JPATH_PLATFORM
+define('JPATH_PLATFORM',      JPATH_LIBRARIES);

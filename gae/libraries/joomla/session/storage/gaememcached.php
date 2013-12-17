@@ -29,15 +29,10 @@ class JSessionStorageGaememcached extends JSessionStorageMemcached
 	public function __construct($options = array())
 	{
 
-
-
 		if (!self::isSupported())
 		{
 			throw new RuntimeException('GAE Memcached Extension is not available', 404);
 		}
-		parent::__construct($options);
-
-		$config = JFactory::getConfig();
 
 		// GAE Memcached doesn't use these configs
 		$this->_servers = array(
@@ -49,18 +44,6 @@ class JSessionStorageGaememcached extends JSessionStorageMemcached
 	}
 
 	/**
-	 * Register the functions of this class with PHP's session handler
-	 *
-	 * @return  void
-	 *
-	 * @since   12.2
-	 */
-	public function register()
-	{
-		ini_set('session.save_handler', 'memcached');
-	}
-
-	/**
 	 * Test to see if the SessionHandler is available.
 	 *
 	 * @return boolean  True on success, false otherwise.
@@ -69,6 +52,6 @@ class JSessionStorageGaememcached extends JSessionStorageMemcached
 	 */
 	static public function isSupported()
 	{
-		return (class_exists('Memcached'));
+		return (ini_get('session.save_handler') == 'user');
 	}
 }
