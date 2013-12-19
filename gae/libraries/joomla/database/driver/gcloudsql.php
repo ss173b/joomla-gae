@@ -10,14 +10,14 @@
 defined('JPATH_PLATFORM') or die;
 
 /**
- * MySQLi database driver
+ * Google Cloud SQL database driver based on mysqli
  *
  * @package     Joomla.Platform
  * @subpackage  Database
  * @see         http://php.net/manual/en/book.mysqli.php
  * @since       12.1
  */
-class JDatabaseDriverGaemysqli extends JDatabaseDriverMysqli
+class JDatabaseDriverGcloudsql extends JDatabaseDriverMysqli
 {
 	/**
 	 * The name of the database driver.
@@ -56,16 +56,32 @@ class JDatabaseDriverGaemysqli extends JDatabaseDriverMysqli
 		$hostOptions = explode('|',$this->options['host']);
 		list($h, $p, $s) = $hostOptions;
 
-		if(isset($_SERVER['SERVER_SOFTWARE']) && strpos($_SERVER['SERVER_SOFTWARE'],'Google App Engine') !== false) {
+		// Our default non-GAE state
+		$host = $h;
+		$port = $p;
+		$socket = null;
 
-			$host = null;
-			$port = null;
-			$socket = $s;
-		}else{
-			$host = $h;
-			$port = $p;
-			$socket = null;
+		/**
+		 *  Google App Engine Server Software is either
+		 * Development or
+		 * Google App Engine
+		 */
+		if ( isset($_SERVER['SERVER_SOFTWARE']) )
+		{
+			// Only GAE Instance uses socket
+			$beginsWith = substr($_SERVER['SERVER_SOFTWARE'],0,11);
+
+
+			if ( $beginsWith == 'Google App ')
+			{
+				$host = null;
+				$port = null;
+				$socket = $s;
+			}
+
 		}
+
+
 		// Make sure the MySQLi extension for PHP is installed and enabled.
 		if (!function_exists('mysqli_connect'))
 		{
@@ -79,7 +95,7 @@ class JDatabaseDriverGaemysqli extends JDatabaseDriverMysqli
 		// Attempt to connect to the server.
 		if (!$this->connection)
 		{
-			throw new RuntimeException('Could not connect to MySQL.');
+			throw new RuntimeException('Could not connect to Google Cloud SQL.');
 		}
 
 		// Set sql_mode to non_strict mode

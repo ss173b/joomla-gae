@@ -35,3 +35,5 @@ handlers:
   static_files: joomla-cms/\1
   upload: joomla-cms/(.*\.(css$|js$|ico$|jpg$|png$|gif$|woff$|ttf$|svg$))
   application_readable: true
+
+
