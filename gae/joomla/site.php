@@ -17,4 +17,4 @@ JLoader::registerPrefix('J', GAEJOOMLALIBS, false, true);
 chdir (JPATH_BASE);
 
 // Execute main index.php
-require 'index.php';
+require JOOMLACMSSITEFILE;

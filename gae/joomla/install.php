@@ -5,6 +5,7 @@ libxml_disable_entity_loader(false);
 
 // Load defined constants for Joomla under GAE
 define('SET_JPATH_BASE', 'JOOMLACMSINSTALLDIR');
+define('SET_JPATH_THEMES', 'JPATH_BASE');
 require __DIR__ . '/defines.php';
 
 // Init loader
@@ -13,8 +14,7 @@ require_once JPATH_PLATFORM . '/loader.php';
 // Add Installation prefix in case we have to over-ride any classes
 JLoader::registerPrefix('J', GAEJOOMLALIBS);
 
-// First check for classes prefixed with Installation in GAE then in Joomla
-JLoader::registerPrefix('Installation', GAEINSTALLATIONLIBS);
+// Register the Installation application
 JLoader::registerPrefix('Installation', JPATH_INSTALLATION);
 
 // Register installation router

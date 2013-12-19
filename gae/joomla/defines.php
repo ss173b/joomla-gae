@@ -41,9 +41,14 @@ define('JPATH_ADMINISTRATOR', JPATH_ROOT . '/administrator');
 define('JPATH_LIBRARIES',     JPATH_ROOT . '/libraries');
 define('JPATH_PLUGINS',       JPATH_ROOT . '/plugins');
 define('JPATH_INSTALLATION',  JPATH_ROOT . '/installation');
-define('JPATH_THEMES',        JPATH_BASE . '/templates');
 define('JPATH_CACHE',         JPATH_BASE . '/cache');
 define('JPATH_MANIFESTS',     JPATH_ADMINISTRATOR . '/manifests');
+
+// Register custom JPATH_THEMES
+if (defined('SET_JPATH_THEMES'))
+	define('JPATH_THEMES',    constant(SET_JPATH_THEMES));
+else
+	define('JPATH_THEMES',    JPATH_BASE . '/templates');
 
 // Loader requires JPATH_PLATFORM
 define('JPATH_PLATFORM',      JPATH_LIBRARIES);
