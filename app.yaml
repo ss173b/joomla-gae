@@ -1,5 +1,5 @@
-application: woodzu123
-version: 2
+application: overnumerousness-site
+version: overnumerousness-joomla-site-1
 runtime: php
 api_version: 1
 threadsafe: true
