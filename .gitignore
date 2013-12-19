@@ -20,6 +20,3 @@
 
 # phpDocumentor Logs #
 phpdoc-*
-
-# Custom
-/app.yaml
