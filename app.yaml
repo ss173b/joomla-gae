@@ -1,5 +1,5 @@
-application: overnumerousness-site
-version: overnumerousness-joomla-site-1
+application: woodzu123
+version: 2
 runtime: php
 api_version: 1
 threadsafe: true
@@ -16,7 +16,15 @@ threadsafe: true
 
 # For maintenability, handlers are kept in seperate files and included here.  All handlers should be placed in the gae/app.yaml.d subdirectory and then included here
 
+handlers:
+- url: /favicon\.ico
+  static_files: favicon.ico
+  upload: /favicon\.ico
+
 includes:
+# Media file paths have to be placed first
+- gae/app.yaml.d/joomla-media.yaml
+
 # phpinfo page
 - gae/app.yaml.d/info.yaml
 # various function, class, header dumpage page
@@ -31,3 +39,4 @@ includes:
 - gae/app.yaml.d/joomla-admin.yaml
 # joomla site
 - gae/app.yaml.d/joomla-site.yaml
+

@@ -2,15 +2,20 @@
 
 handlers:
 
-- url: /installation/template/(.*\.(css$|js$|ico$|jpg$|png$|gif$))
-  static_files: joomla-cms/installation/template/\1
-  upload: joomla-cms/installation/template/(.*\.(css$|js$|ico$|jpg$|png$|gif$))
-  application_readable: true
+
+# Match http://domain/installation or http://domain/installation/
+# and redirect them to the index.php route
+- url: /installation(/)?
+# Path to script to execute for this uri
+  script: gae/redirect/install.php
+# Use HTTPS: never, always, or optional
   secure: always
+# Google App Logon config: optional, required, admin [required and must be app admin]
+  login: admin
 
 
-# Regular expression of uri to match for this script
-- url: /installation/.*
+# Match http://domain/installation/index.php with possible SEF and/or query params
+- url: /installation/index.php(/.*)?(\?.*)?
 # Path to script to execute for this uri
   script: gae/joomla/install.php
 # Use HTTPS: never, always, or optional
