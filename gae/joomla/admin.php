@@ -20,5 +20,14 @@ JLoader::registerPrefix('J', GAEJOOMLALIBS, false, true);
 //Some file checks are relative to the current working directory, so set to where it would normally be
 chdir (JOOMLACMSADMINDIR);
 
-// Execute install file
-require_once(JOOMLACMSADMINFILE);
+require_once JPATH_BASE . '/includes/helper.php';
+require_once JPATH_BASE . '/includes/toolbar.php';
+
+// Mark afterLoad in the profiler.
+JDEBUG ? $_PROFILER->mark('afterLoad') : null;
+
+// Instantiate the application.
+$app = JFactory::getApplication('administrator');
+
+// Execute the application.
+$app->execute();
