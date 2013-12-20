@@ -1,7 +1,15 @@
 application: overnumerousness-site
-version: overnumerousness-joomla-site-1
+
+# arbitrary string used to identify version
+version: overnumerousness-site
+
+# always php for php apps
 runtime: php
+
+# always version 1
 api_version: 1
+
+# Enables an instance to handle requests at the same time
 threadsafe: true
 
 #handlers:
@@ -20,6 +28,7 @@ includes:
 # Media file paths have to be placed first
 - gae/app.yaml.d/joomla-media.yaml
 
+##Non-joomla debugging information pages
 # phpinfo page
 - gae/app.yaml.d/info.yaml
 # various function, class, header dumpage page
@@ -28,9 +37,17 @@ includes:
 - gae/app.yaml.d/apc.yaml
 # phpinfo page
 - gae/app.yaml.d/test.yaml
+
+
+##Joomla pages
 # joomla install
 - gae/app.yaml.d/joomla-install.yaml
 # joomla admin
 - gae/app.yaml.d/joomla-admin.yaml
 # joomla site
 - gae/app.yaml.d/joomla-site.yaml
+
+## Additional services
+# Pagespeed has to be IN app.yaml, so it is copied from this file
+#- gae/app.yaml.d/pagespeed.yaml
+#pagespeed:

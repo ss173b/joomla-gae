@@ -1,0 +1,270 @@
+pagespeed:
+
+domains_to_rewrite:
+ # - somdomain.appspot.com
+  - https://*.appspot.com
+#  url_blacklist:
+#  - http://myapp.com/blob/*
+#  - http://myapp.com/comments/*
+enabled_rewriters:
+
+  ##HTML rewriters
+
+  # https://developers.google.com/speed/pagespeed/service/ProxyResources#ProxyCSS
+  # default: on
+  - ProxyCss
+
+  # https://developers.google.com/speed/docs/pss/ProxyResources#ProxyImages
+  # default: on
+  - ProxyImages
+
+  # https://developers.google.com/speed/docs/pss/ProxyResources#ProxyJavaScript
+  # default: on
+  - ProxyJs
+
+  # https://developers.google.com/speed/docs/pss/OptimizeHtml#ConvertMetaTags
+  # default: on
+  - ConvertMetaTags
+
+  # https://developers.google.com/speed/docs/pss/InlineSmallResources#InlineCSS
+  # default: on
+  #- InlineCss
+
+  # https://developers.google.com/speed/docs/pss/InlineSmallResources#InlineJavaScript
+  # default: off
+  - InlineJs
+
+  # https://developers.google.com/speed/docs/pss/InlineSmallResources#InlineImages
+  # default: off
+  - InlineImages
+
+  # https://developers.google.com/speed/docs/pss/InlineSmallResources.html#InlineImagePreviews
+  # default: on
+  - InlinePreviewImages
+
+  # https://developers.google.com/speed/docs/pss/ProxyResources#ProxyJavaScript
+  # default: off
+  - CollapseWhitespace
+
+  # https://developers.google.com/speed/docs/pss/OptimizeHtml#CombineHEADs
+  # default: off
+  - CombineHeads
+
+  # https://developers.google.com/speed/docs/pss/OptimizeHtml#ElideAttributes
+  # default: off
+  - ElideAttributes
+
+  # https://developers.google.com/speed/docs/pss/OptimizeHtml#RemoveComments
+  # default: off
+  - RemoveComments
+
+  # https://developers.google.com/speed/docs/pss/OptimizeHtml#RemoveQuotes
+  # default: off
+  - RemoveQuotes
+
+  # https://developers.google.com/speed/docs/pss/OptimizeHtml#TrimURLs
+  # default: off
+  - LeftTrimUrls
+
+## CSS Rewriters
+
+  # https://developers.google.com/speed/docs/pss/CombineCSS.html
+  # default: on
+  - CombineCss
+
+  # https://developers.google.com/speed/docs/pss/MoveCSSToHead.html
+  # default: on
+  - MoveCssToHead
+
+
+  # https://developers.google.com/speed/docs/pss/MinifyCSS.html
+  # default: off
+  - MinifyCss
+
+## Javascript Rewriters
+
+  # https://developers.google.com/speed/docs/pss/CombineJavaScript.html
+  # default: on
+  - CombineJs
+
+  # https://developers.google.com/speed/docs/pss/OptimizeJavaScript.html
+  # default: on
+  - JsOptimize
+
+  # https://developers.google.com/speed/docs/pss/DeferJavaScript.html
+  # default: off
+  - DeferJs
+
+
+## Image Rewriters
+
+  # https://developers.google.com/speed/docs/pss/OptimizeImages#WebpOptimization
+  # default: on
+  - WebpOptimization
+
+  # https://developers.google.com/speed/docs/pss/OptimizeImages#ImageConvertToJpeg
+  # default: on
+  - ImageConvertToJpeg
+
+  # https://developers.google.com/speed/docs/pss/OptimizeImages#ImageRecompressJpeg
+  # default: on
+  - ImageRecompressJpeg
+
+  # https://developers.google.com/speed/docs/pss/OptimizeImages#ImageProgressiveJpeg
+  # default: on
+  - ImageProgressiveJpeg
+
+  # https://developers.google.com/speed/docs/pss/OptimizeImages#ImageRecompressPng
+  # default: on
+  - ImageRecompressPng
+
+  # https://developers.google.com/speed/docs/pss/OptimizeImages#ImageStripMetadata
+  # default: on
+  - ImageStripMetadata
+
+  # https://developers.google.com/speed/docs/pss/OptimizeImages#ImageStripColorProfile
+  # default: on
+  - ImageStripColorProfile
+
+  # https://developers.google.com/speed/docs/pss/OptimizeImages#ImageResize
+  # default: on
+  - ImageResize
+
+  # https://developers.google.com/speed/docs/pss/LazyloadImages.html
+  # default: on
+  - LazyloadImages
+
+  # https://developers.google.com/speed/docs/pss/OptimizeImages#ImageAddDimensions
+  # default: off
+  - ImageAddDimensions
+
+  disabled_rewriters:
+    ##HTML rewriters
+
+    # https://developers.google.com/speed/pagespeed/service/ProxyResources#ProxyCSS
+    # default: on
+    #- ProxyCss
+
+    # https://developers.google.com/speed/docs/pss/ProxyResources#ProxyImages
+    # default: on
+    #- ProxyImages
+
+    # https://developers.google.com/speed/docs/pss/ProxyResources#ProxyJavaScript
+    # default: on
+    #- ProxyJs
+
+    # https://developers.google.com/speed/docs/pss/OptimizeHtml#ConvertMetaTags
+    # default: on
+    #- ConvertMetagTags
+
+    # https://developers.google.com/speed/docs/pss/InlineSmallResources#InlineCSS
+    # default: on
+    - InlineCss
+
+    # https://developers.google.com/speed/docs/pss/InlineSmallResources#InlineJavaScript
+    # default: off
+    #- InlineJs
+
+    # https://developers.google.com/speed/docs/pss/InlineSmallResources#InlineImages
+    # default: off
+    #- InlineImages
+
+    # https://developers.google.com/speed/docs/pss/InlineSmallResources.html#InlineImagePreviews
+    # default: on
+    #- InlinePreviewImages
+
+    # https://developers.google.com/speed/docs/pss/ProxyResources#ProxyJavaScript
+    # default: off
+    #- CollapseWhitespace
+
+    # https://developers.google.com/speed/docs/pss/OptimizeHtml#CombineHEADs
+    # default: off
+    #- CombineHeads
+
+    # https://developers.google.com/speed/docs/pss/OptimizeHtml#ElideAttributes
+    # default: off
+    #- ElideAttributes
+
+    # https://developers.google.com/speed/docs/pss/OptimizeHtml#RemoveComments
+    # default: off
+    #- RemoveComments
+
+    # https://developers.google.com/speed/docs/pss/OptimizeHtml#RemoveQuotes
+    # default: off
+    #- RemoveQuotes
+
+    # https://developers.google.com/speed/docs/pss/OptimizeHtml#TrimURLs
+    # default: off
+    #- LeftTrimUrls
+
+  ## CSS Rewriters
+
+    # https://developers.google.com/speed/docs/pss/CombineCSS.html
+    # default: on
+    #- CombineCss
+
+    # https://developers.google.com/speed/docs/pss/MoveCSSToHead.html
+    # default: on
+    #- MoveCssToHead
+
+
+    # https://developers.google.com/speed/docs/pss/MinifyCSS.html
+    # default: off
+    #- MinifyCss
+
+  ## Javascript Rewriters
+
+    # https://developers.google.com/speed/docs/pss/CombineJavaScript.html
+    # default: on
+    #- CombineJs
+
+    # https://developers.google.com/speed/docs/pss/OptimizeJavaScript.html
+    # default: on
+    #- JsOptimize
+
+    # https://developers.google.com/speed/docs/pss/DeferJavaScript.html
+    # default: off
+    #- DeferJs
+
+
+  ## Image Rewriters
+
+    # https://developers.google.com/speed/docs/pss/OptimizeImages#WebpOptimization
+    # default: on
+    #- WebpOptimization
+
+    # https://developers.google.com/speed/docs/pss/OptimizeImages#ImageConvertToJpeg
+    # default: on
+    #- ImageConvertToJpeg
+
+    # https://developers.google.com/speed/docs/pss/OptimizeImages#ImageRecompressJpeg
+    # default: on
+    #- ImageRecompressJpeg
+
+    # https://developers.google.com/speed/docs/pss/OptimizeImages#ImageProgressiveJpeg
+    # default: on
+    #- ImageProgressiveJpeg
+
+    # https://developers.google.com/speed/docs/pss/OptimizeImages#ImageRecompressPng
+    # default: on
+    #- ImageRecompressPng
+
+    # https://developers.google.com/speed/docs/pss/OptimizeImages#ImageStripMetadata
+    # default: on
+    #- ImageStripMetadata
+
+    # https://developers.google.com/speed/docs/pss/OptimizeImages#ImageStripColorProfile
+    # default: on
+    #- ImageStripColorProfile
+
+    # https://developers.google.com/speed/docs/pss/OptimizeImages#ImageResize
+    # default: on
+    #- ImageResize
+
+    # https://developers.google.com/speed/docs/pss/LazyloadImages.html
+    # default: on
+    #- LazyloadImages
+
+    # https://developers.google.com/speed/docs/pss/OptimizeImages#ImageAddDimensions
+    # default: off
+    #- ImageAddDimensions

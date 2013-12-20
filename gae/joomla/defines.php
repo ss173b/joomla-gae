@@ -23,3 +23,5 @@ define('JOOMLACMSINSTALLFILE', JOOMLACMSINSTALLDIR.'/index.php');
 
 // Set Jexec
 define('_JEXEC', 1);
+
+
