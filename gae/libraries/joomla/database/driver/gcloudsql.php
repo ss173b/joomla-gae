@@ -77,8 +77,6 @@ class JDatabaseDriverGcloudsql extends JDatabaseDriverMysqli
 				$host = null;
 				$port = null;
 				$socket = $s;
-				$this->options['user'] = 'root';
-				$this->options['password'] = '';
 			}
 
 		}
