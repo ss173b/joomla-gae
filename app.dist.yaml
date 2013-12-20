@@ -1,7 +1,16 @@
+# arbitrary string used to identify your application
 application: YOUR_APPLICATION_ID
-version: default
+
+# arbitrary string used to identify version
+version: joomla
+
+# always php for php apps
 runtime: php
+
+# always version 1
 api_version: 1
+
+# Enables an instance to handle requests at the same time
 threadsafe: true
 
 #handlers:
@@ -17,6 +26,10 @@ threadsafe: true
 # For maintenability, handlers are kept in seperate files and included here.  All handlers should be placed in the gae/app.yaml.d subdirectory and then included here
 
 includes:
+# Media file paths have to be placed first
+- gae/app.yaml.d/joomla-media.yaml
+
+##Non-joomla debugging information pages
 # phpinfo page
 - gae/app.yaml.d/info.yaml
 # various function, class, header dumpage page
@@ -25,9 +38,17 @@ includes:
 - gae/app.yaml.d/apc.yaml
 # phpinfo page
 - gae/app.yaml.d/test.yaml
+
+
+##Joomla pages
 # joomla install
 - gae/app.yaml.d/joomla-install.yaml
 # joomla admin
 - gae/app.yaml.d/joomla-admin.yaml
 # joomla site
 - gae/app.yaml.d/joomla-site.yaml
+
+## Additional services
+# Pagespeed has to be IN app.yaml, so it is copied from this file
+#- gae/app.yaml.d/pagespeed.yaml
+#pagespeed:
