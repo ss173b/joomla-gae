@@ -36,6 +36,26 @@ class JCacheStorageGsbucket extends JCacheStorageFile
 	protected $dirctx;
 
 	/**
+	 * Get a cache_id string from an id/group pair
+	 *
+	 * @param   string  $id     The cache data id
+	 * @param   string  $group  The cache data group
+	 *
+	 * @return  string   The cache_id string
+	 *
+	 * @since   11.1
+	 */
+	protected function _getCacheId($id, $group)
+	{
+		$name = $this->_application . '-' . $id . '-' . $this->_language;
+		$this->rawname =  $name;
+		$cacheId =  $name;
+
+		return $cacheId;
+	}
+
+
+	/**
 	 * Constructor
 	 *
 	 * @param   array  $options  Optional parameters
@@ -50,13 +70,16 @@ class JCacheStorageGsbucket extends JCacheStorageFile
 
 		$this->_root = 'gs://'.$config->get('gsbucket_name', '').'/cache';
 		$expires = $this->_now + $this->_lifetime;
-		$params = "{'expires':'$expires'}";
+
+		$metadata = ['now' => $this->_now, 'lifetime' => $this->_lifetime];
+		//$cacheControl = ['max-age=' => $this->_lifetime ];
+		$cacheControl = 'no-cache';
 		$options = [ "gs" => [ "Content-Type" => "application/json",
-			"cache_control" => "max-age={$this->_lifetime}",
+			"Cache-Control" => $cacheControl,
 			"enable_cache" => true,
 			"enable_optimistic_cache" => true,
 			"read_cache_expiry_seconds" => $this->_lifetime,
-			"user_metadata"=> $params
+			"metadata"=> $metadata
 								]];
 		$this->filectx = stream_context_create($options);
 
@@ -73,11 +96,7 @@ class JCacheStorageGsbucket extends JCacheStorageFile
 		{
 
 			//echo "creating {$this->_root }<br/>";
-			mkdir($this->_root , 700 , true, $this->dirctx);
-			// Make sure the index file is there
-			$indexFile = $this->_root  . '/index.html';
-			//echo "creating $indexFile<br/>";
-			file_put_contents($indexFile, '<!DOCTYPE html><title></title>', 0, $this->filectx);
+			mkdir($this->_root , 777 , true, $this->dirctx);
 
 		}
 	}
@@ -123,7 +142,7 @@ class JCacheStorageGsbucket extends JCacheStorageFile
 	public function store($id, $group, $data)
 	{
 		$path = $this->_getFilePath($id, $group);
-		//echo "storing cache to $path<br/>";
+		echo "storing cache to $path<br/>";
 		return file_put_contents($path, $data,  0, $this->filectx);
 
 	}
@@ -243,14 +262,9 @@ class JCacheStorageGsbucket extends JCacheStorageFile
 
 		//	echo "creating $dir<br/>";
 			mkdir($dir, 700 , true, $this->dirctx);
-			// Make sure the index file is there
-			$indexFile = $dir . '/index.html';
-			//echo "creating $indexFile<br/>";
-			file_put_contents($indexFile, '<!DOCTYPE html><title></title>', 0, $this->filectx);
-
 		}
 
-		return $dir . '/' . $name . '.php' ;
+		return $dir . '/' . $name . '.json' ;
 	}
 
 	/**
@@ -422,6 +436,10 @@ class JCacheStorageGsbucket extends JCacheStorageFile
 	{
 		$arr = array();
 
+		echo "checking path <br/>";
+		echo $path;
+		var_dump(stat($path));
+		echo '<hr/>';
 		// Check to make sure the path valid and clean
 		$path = $this->_cleanPath($path);
 
