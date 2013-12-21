@@ -5,8 +5,14 @@ handlers:
 
 # redirect all favicon requests
 - url: /favicon.ico
-  static_files: favicon.ico
-  upload: joomla-cms/templates/protostar/favicon.ico
+  static_files: joomla-cms/favicon.ico
+  upload: joomla-cms/favicon.ico
+  application_readable: true
+
+ # enable robots.txt
+- url: /robots.txt
+  static_files: joomla-cms/robots.txt
+  upload: joomla-cms/robots.txt
   application_readable: true
 
 - url: /installation/template/(.*\.(css$|js$|ico$|jpg$|png$|gif$|woff$|ttf$|svg$))
