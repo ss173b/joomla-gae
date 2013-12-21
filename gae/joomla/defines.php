@@ -25,3 +25,19 @@ define('JOOMLACMSINSTALLFILE', JOOMLACMSINSTALLDIR.'/index.php');
 define('_JEXEC', 1);
 
 
+// Setup new Google Storage stream wrapper to handle append mode
+// Setup the GS stream wrapper
+require_once(GAELIBS.'/gmort/appengine/ext/cloud_storage_streams/CloudStorageStreamWrapper.php');
+
+$url_flags = STREAM_IS_URL;
+// Clear the existing GS wrapper
+$existed = in_array("gs", stream_get_wrappers());
+if ($existed) {
+	stream_wrapper_unregister("gs");
+}
+
+// Replace it with our own wrapper
+stream_wrapper_register('gs',
+	'\gmort\appengine\ext\cloud_storage_streams\CloudStorageStreamWrapper',
+	$url_flags);
+

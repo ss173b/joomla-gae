@@ -16,8 +16,41 @@ defined('JPATH_PLATFORM') or die;
  * @subpackage  Cache
  * @since       11.1
  */
-class JCacheStorageGsbucket extends JCacheStorageFile
+class JCacheStorageGsbucket extends JCacheStorage
 {
+
+	/**
+	 * Stream identifier
+	 *
+	 * @var    string
+	 *
+	 */
+	protected $streamId = 'gs://';
+
+	/**
+	 * Bucket Name
+	 *
+	 * @var    string
+	 *
+	 */
+	protected $bucketName;
+
+	/**
+	 * Object Name Prefix
+	 *
+	 * @var    string
+	 *
+	 */
+	protected $objectPrefix;
+
+	/**
+	 * Stream Path
+	 *
+	 * @var    string
+	 *
+	 */
+	protected $streamPath;
+
 
 	/**
 	 * Google Storage Stream Context for files
@@ -64,14 +97,13 @@ class JCacheStorageGsbucket extends JCacheStorageFile
 	 */
 	public function __construct($options = array())
 	{
+
+		// Google Cloud Storage cannot be locked
+		$options['locking'] = false;
 		parent::__construct($options);
-		// Override file path with bucket
-		$config = JFactory::getConfig();
 
-		$this->_root = 'gs://'.$config->get('gsbucket_name', '').'/cache';
-		$expires = $this->_now + $this->_lifetime;
 
-		$metadata = ['now' => $this->_now, 'lifetime' => $this->_lifetime];
+		$metadata = ['now' => $this->_now, 'lifetime' => $this->_lifetime, 'expires' => ($this->_now + $this->_lifetime)];
 		//$cacheControl = ['max-age=' => $this->_lifetime ];
 		$cacheControl = 'no-cache';
 		$options = [ "gs" => [ "Content-Type" => "application/json",
@@ -90,13 +122,20 @@ class JCacheStorageGsbucket extends JCacheStorageFile
 		]];
 		$this->dirctx = stream_context_create($options);
 
+		// If configuration is not passed as an option, get the default application config
+		$config = (isset($options['config'])) ? $options['config'] : JFactory::getConfig();
+
+		$this->bucketName = (isset($options['bucket_name'])) ? $options['bucket_name'] : $config->get('gsbucket_name', '');
+		$this->objectPrefix = (isset($options['object_prefix'])) ? $options['object_prefix'] : $config->get('gsobject_prefix', 'cache');
+
+		$this->streamPath = $this->streamId . $this->bucketName . '/' . $this->objectPrefix;
 
 		// If the folder doesn't exist try to create it
-		if (!is_dir($this->_root ))
+		if (!is_dir($this->streamPath ))
 		{
 
 			//echo "creating {$this->_root }<br/>";
-			mkdir($this->_root , 777 , true, $this->dirctx);
+			mkdir($this->streamPath , null , true, $this->dirctx);
 
 		}
 	}
@@ -117,10 +156,9 @@ class JCacheStorageGsbucket extends JCacheStorageFile
 	public function get($id, $group, $checkTime = true)
 	{
 		$data = false;
-		$path = $this->_getFilePath($id, $group);
+		$path = $this->getStreamPath($id, $group);
 		if (file_exists($path))
 		{
-			//echo "retrieve cache to $path<br/>";
 			$data =  file_get_contents($path, false, $this->filectx);
 		}
 
@@ -141,13 +179,30 @@ class JCacheStorageGsbucket extends JCacheStorageFile
 	 */
 	public function store($id, $group, $data)
 	{
-		$path = $this->_getFilePath($id, $group);
-		echo "storing cache to $path<br/>";
-		return file_put_contents($path, $data,  0, $this->filectx);
-
+		$path = $this->getStreamPath($id, $group);
+		return file_put_contents($path, $data,  null, $this->filectx);
 	}
 
+	/**
+	 * Remove a cached data entry by id and group
+	 *
+	 * @param   string  $id     The cache data id
+	 * @param   string  $group  The cache data group
+	 *
+	 * @return  boolean  True on success, false otherwise
+	 *
+	 * @since   11.1
+	 */
+	public function remove($id, $group)
+	{
+		$path = $this->getStreamPath($id, $group);
+		if (file_exists($path))
+		{
+			return unlink($path);
+		}
 
+		return false;
+	}
 
 	/**
 	 * Garbage collect expired cache data
@@ -191,58 +246,121 @@ class JCacheStorageGsbucket extends JCacheStorageFile
 	}
 
 	/**
-	 * Lock cached item
+	 * Get all cached data
 	 *
-	 * @param   string   $id        The cache data id
-	 * @param   string   $group     The cache data group
-	 * @param   integer  $locktime  Cached item max lock time
-	 *
-	 * @return  boolean  True on success, false otherwise.
+	 * @return  mixed    Boolean false on failure or a cached data object
 	 *
 	 * @since   11.1
+	 * @todo    Review this method. The docblock doesn't fit what it actually does.
 	 */
-	public function lock($id, $group, $locktime)
+	public function getAll()
 	{
+		parent::getAll();
+		$data = $this->processStreamPath($this->streamPath);
+		var_dump($data);
 
-		$returning = new stdClass;
-		$returning->locklooped = false;
-		$returning->locked = true;
-		return $returning;
+
+		return $data;
 	}
 
 	/**
-	 * Unlock cached item
+	 * Clean cache for a group given a mode.
 	 *
-	 * @param   string  $id     The cache data id
+	 * @param   string  $streamPath  The path to recursively check
+	 * @param   JCacheStorageHelper  $currentEntry  The currently selected directory iterator
+	 *
+	 * @return  array  array of JCacheStorageHelper
+	 *
+	 */
+	protected function processStreamPath($streamPath = '', $currentEntry = null)
+	{
+
+		$data = array();
+		$item = new JCacheStorageHelper($streamPath);
+		$item->entry = $currentEntry;
+		$data[] = $item;
+		$entries = new DirectoryIterator($streamPath);
+		foreach($entries as $entry)
+		{
+			$pathName =  $entry->getPathname();
+			if ($entry->isFile())
+			{
+				$item->updateSize($entry->getSize());
+				$cacheItem = new JCacheStorageHelper($streamPath);
+				$cacheItem->updateSize($entry->getSize());
+				$cacheItem->entry = $entry;
+				$data[] = $cacheItem;
+			}
+			if ($entry->isDir())
+			{
+				$subData = $this->processStreamPath($pathName, $entry);
+				$data = array_merge($data, $subData);
+			}
+
+		}
+		return $data;
+
+	}
+
+	/**
+	 * Clean cache objects for a group given a mode.
+	 *
 	 * @param   string  $group  The cache data group
+	 * @param   string  $mode   The mode for cleaning cache [group|notgroup]
+	 *                          group mode     : cleans all cache objects in the group
+	 *                          notgroup mode  : cleans all cache objects not in the group
 	 *
-	 * @return  boolean  True on success, false otherwise.
-	 *
-	 * @since   11.1
-	 */
-	public function unlock($id, $group = null)
-	{
-		return true;
-	}
-
-	/**
-	 * Check to make sure cache is still valid, if not, delete it.
-	 *
-	 * @param   string  $id     Cache key to expire.
-	 * @param   string  $group  The cache data group.
-	 *
-	 * @return  boolean  False if not valid
+	 * @return  boolean  True on success, false otherwise
 	 *
 	 * @since   11.1
 	 */
-	protected function _checkExpire($id, $group)
+	public function clean($group, $mode = null)
 	{
-		$path = $this->_getFilePath($id, $group);
-		return file_exists($path);
+		$return = true;
+
+		$cacheObjects = $this->getAll();
+		$targetPath = $this->streamPath . '/' . $group . '/';
+
+
+		switch ($mode)
+		{
+			case 'notgroup':
+					foreach ($cacheObjects as $entry)
+					{
+						if (isset($entry->entry))
+						{
+							if ( ($entry->entry->isFile())
+							&& (strpos($entry->entry->getPathname(), $targetPath) !== 0 ))
+							{
+								@unlink($entry->entry->getPathname());
+							}
+
+						}
+					}
+				break;
+			case 'group':
+			default:
+			foreach ($cacheObjects as $entry)
+			{
+				if (isset($entry->entry))
+				{
+					if ( ($entry->entry->isFile())
+						&& (strpos($entry->entry->getPathname(), $targetPath) === 0 ))
+					{
+						@unlink($entry->entry->getPathname());
+					}
+
+				}
+			}
+				break;
+		}
+		return $return;
 	}
 
+
+
 	/**
-	 * Get a cache file path from an id/group pair
+	 * Get a cache object stream path from an id/group pair
 	 *
 	 * @param   string  $id     The cache data id
 	 * @param   string  $group  The cache data group
@@ -251,17 +369,17 @@ class JCacheStorageGsbucket extends JCacheStorageFile
 	 *
 	 * @since   11.1
 	 */
-	protected function _getFilePath($id, $group)
+	protected function getStreamPath($id, $group)
 	{
 		$name = $this->_getCacheId($id, $group);
-		$dir = $this->_root . '/' . $group;
+		$dir = $this->streamPath . '/' . $group;
 
 		// If the folder doesn't exist try to create it
 		if (!is_dir($dir))
 		{
 
 		//	echo "creating $dir<br/>";
-			mkdir($dir, 700 , true, $this->dirctx);
+			mkdir($dir, 0 , true, $this->dirctx);
 		}
 
 		return $dir . '/' . $name . '.json' ;
@@ -313,23 +431,26 @@ class JCacheStorageGsbucket extends JCacheStorageFile
 	}
 
 	/**
-	 * Function to strip additional / or \ in a path name
+	 * Function to ensure a valid stream path
 	 *
 	 * @param   string  $path  The path to clean
-	 * @param   string  $ds    Directory separator (optional)
-	 *
 	 * @return  string  The cleaned path
 	 *
-	 * @since   11.1
 	 */
-	protected function _cleanPath($path, $ds = DIRECTORY_SEPARATOR)
+	protected function _cleanPath($path)
 	{
 		$path = trim($path);
 
 		if (empty($path))
 		{
-			$path = $this->_root;
+			$path = $this->_stream;
 		}
+
+		if (strpos($path, $this->_streamId ) !== 0)
+		{
+			$path = $this->_streamId . $path;
+		}
+
 
 		return $path;
 	}
