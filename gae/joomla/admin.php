@@ -19,6 +19,16 @@ require_once JPATH_BASE . '/includes/framework.php';
 // By setting prepend to true, we force our directory to be checked first
 JLoader::registerPrefix('J', GAEJOOMLALIBS, false, true);
 
+
+// Set Mailer
+// todo: move somewhere else
+$conf = JFactory::getConfig();
+JFactory::$mailer = JMailGae::getInstance();
+$mailFrom = JMailHelper::cleanLine($conf->get('mailfrom'));
+$mailFromName = JMailHelper::cleanLine($conf->get('fromname'));
+JFactory::$mailer->SetFrom($mailFrom, $mailFromName, 0);
+
+
 //Some file checks are relative to the current working directory, so set to where it would normally be
 chdir (JOOMLACMSADMINDIR);
 

@@ -40,6 +40,17 @@ class PlgContentGaeconfig extends JPlugin
 			// Replace XML nodes[aka Joomla Form fields] in this form with ones that have been defined in our replacement file
 			$form->load($gaeXml);
 
+
+			// Add option for GAE Mailer
+			// todo: fixme https://github.com/joomla/joomla-cms/pull/2708
+			$fieldMailer = $form->getXML()->xpath('//field[@name="mailer"]');
+			$optionGaeMailer = $fieldMailer[0]->addChild('option', 'COM_CONFIG_FIELD_VALUE_GAE_MAIL');
+			$optionGaeMailer->addAttribute('value', 'gae');
+
+			// Make GAE Mailer default
+			$form->getField('mailer')->default = 'gae';
+
+
 			// Load our language files
 			$app = JFactory::getApplication();
 			$app->getLanguage()->load('plg_gaeconfig', __DIR__);
