@@ -112,7 +112,7 @@ class JMailGae extends JMail
 	protected function _Send()
 	{
 		// PHP Mailer pre-processing
-		if(!$this->PreSend())
+		if (!$this->PreSend())
 			return false;
 
 		try
@@ -127,30 +127,35 @@ class JMailGae extends JMail
 				$message->setReplyTo(current($this->ReplyTo));
 
 			// Add To
-			foreach($this->to as $to)
+			foreach ($this->to as $to)
 				$message->addTo($to[0]);
 
 			// Add CC
-			foreach($this->cc as $cc)
+			foreach ($this->cc as $cc)
 				$message->addCc($cc[0]);
 
 			// Add BCC
-			foreach($this->bcc as $bcc)
+			foreach ($this->bcc as $bcc)
 				$message->addBcc($bcc[0]);
 
 			// Set Subject
 			$message->setSubject($this->Subject);
 
 			// Set Text Body
-			if ($this->AltBody)
-				$message->setTextBody($this->AltBody);
-
-			// Set Text Body
 			if ($this->isHtml())
-				$message->setHtmlBody($this->Body);
+			{
+				if ($this->AltBody)
+					$message->setTextBody((string) $this->AltBody);
+
+				$message->setHtmlBody((string) $this->Body);
+			}
+			elseif ($this->AltBody)
+			{
+				$message->setTextBody((string) $this->AltBody);
+			}
 
 			// Add custom headers
-			foreach(explode("\n", $this->MIMEHeader) as $header)
+			foreach (explode("\n", $this->MIMEHeader) as $header)
 			{
 				list($headerName, $headerValue) = explode(': ', $header, 2);
 
@@ -161,9 +166,13 @@ class JMailGae extends JMail
 				}
 			};
 
-			// Add attachements
-			// todo: implement and test
-			// $message->addAttachmentArray($this->attachment);
+			// Add attachments
+			foreach ($this->attachment as $attachment)
+			{
+				list($filePath,, $fileName) = $attachment;
+
+				$message->addAttachment($fileName, file_get_contents($filePath));
+			}
 
 			// Send the email
 			$message->send();
