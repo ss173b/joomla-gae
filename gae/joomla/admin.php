@@ -2,16 +2,14 @@
 
 // GAE requires this function call in order to load the local xml files
 libxml_disable_entity_loader(false);
+
+// Set the base directory path
+define('SET_JPATH_BASE', 'JOOMLACMSADMINDIR');
+define('_JEXEC', 1);
+
 // Load defined constants for Joomla under GAE
 require_once(__DIR__ . '/defines.php');
 
-// Pre-empt the normal bootstrapping because we need to make a change
-// Set the base directory path
-define('JPATH_BASE', JOOMLACMSADMINDIR);
-// Set the Joomla flag indicating that defines have been done
-define('_JDEFINES', true);
-// Load Joomla defines
-require_once JPATH_BASE . '/includes/defines.php';
 // Load and initialize Joomla CMS Admin framework
 require_once JPATH_BASE . '/includes/framework.php';
 
@@ -32,5 +30,14 @@ JFactory::$mailer->SetFrom($mailFrom, $mailFromName, 0);
 //Some file checks are relative to the current working directory, so set to where it would normally be
 chdir (JOOMLACMSADMINDIR);
 
-// Execute install file
-require_once(JOOMLACMSADMINFILE);
+require_once JPATH_BASE . '/includes/helper.php';
+require_once JPATH_BASE . '/includes/toolbar.php';
+
+// Mark afterLoad in the profiler.
+JDEBUG ? $_PROFILER->mark('afterLoad') : null;
+
+// Instantiate the application.
+$app = JFactory::getApplication('administrator');
+
+// Execute the application.
+$app->execute();

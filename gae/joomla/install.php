@@ -5,22 +5,37 @@
 libxml_disable_entity_loader(false);
 
 // Load defined constants for Joomla under GAE
-require_once __DIR__ . '/defines.php';
+define('SET_JPATH_BASE', 'JOOMLACMSINSTALLDIR');
+define('SET_JPATH_THEMES', 'JPATH_BASE');
+require __DIR__ . '/defines.php';
 
-// Pre-empt the normal bootstrapping because we need to make a change
-// Bootstrap the application
-require_once JOOMLACMSINSTALLDIR . '/application/bootstrap.php';
-
-// Add Installation prefix in case we have to over-ride any classes
-// By setting prepend to true, we force our directory to be checked first
-JLoader::registerPrefix('Installation', GAEINSTALLATIONLIBS, false, true);
+// Init loader
+require_once JPATH_PLATFORM . '/loader.php';
 
 // Add Installation prefix in case we have to over-ride any classes
-// By setting prepend to true, we force our directory to be checked first
-JLoader::registerPrefix('J', GAEJOOMLALIBS, false, true);
+JLoader::registerPrefix('J', GAEJOOMLALIBS);
 
-//Some file checks are relative to the current working directory, so set to where it would normally be
-chdir (JOOMLACMSINSTALLDIR);
+// Register the Installation application
+JLoader::registerPrefix('Installation', JPATH_INSTALLATION);
 
-// Execute install file
-require_once JOOMLACMSINSTALLFILE;
+// Register installation router
+JLoader::register('JRouterInstallation', JPATH_INSTALLATION.'/application/router.php');
+
+// Some file checks are relative to the current working directory, so set to where it would normally be
+chdir (JPATH_INSTALLATION);
+
+
+/**
+ * Constant that is checked in included files to prevent direct access.
+ * define() is used in the installation folder rather than "const" to not error for PHP 5.2 and lower
+ */
+define('_JEXEC', 1);
+
+// Launch the application
+require_once JPATH_INSTALLATION . '/application/framework.php';
+
+// Get the application
+$app = JApplicationWeb::getInstance('InstallationApplicationWeb');
+
+// Execute the application
+$app->execute();
