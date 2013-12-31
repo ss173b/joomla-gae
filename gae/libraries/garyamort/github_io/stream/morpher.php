@@ -14,6 +14,7 @@ class morpher extends wrapper
 
 	public $streamHandle = null;
 	public $dirHandle = null;
+	public $path = null;
 
 	/*
 	 * @var mapper/rule[]
@@ -147,8 +148,10 @@ class morpher extends wrapper
 	public function stream_open($pathname, $mode, $options, &$opened_path)
 	{
 
+
 		// initialize variables on open
 		$return = parent::stream_open($pathname, $mode, $options, $opened_path);
+
 
 
 		if ($this->processPathname($pathname, $mode)) {
@@ -260,6 +263,18 @@ class morpher extends wrapper
 
 	}
 
+	public function url_stat($pathname, $flags)
+	{
+		$return = parent::url_stat($pathname, $flags);
+		if ($this->processPathname($pathname, null)) {
+			if (!$this->checkRecursiveRules($this->path, 0)) {
+
+				$return = stat($this->path->truePath);
+			}
+		}
+		return $return;
+
+	}
 
 	public function rmdir($pathname, $options)
 	{

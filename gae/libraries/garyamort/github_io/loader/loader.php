@@ -11,9 +11,17 @@ namespace garyamort\github_io\loader;
 
 class loader extends \JLoader {
 
+
 	/**
-	 * Register a namespace to the autoloader. When loaded, namespace paths are searched in a "last in, first out" order. This class merely replaces self with static for late static binding
+	 * Container for psr4 namespace prefixes => path map.
 	 *
+	 * @var    array
+	 * @since  never
+	 */
+	protected static $psr4NamespacePrefixes = array();
+
+	/**
+	 * Register a namespace to the autoloader. When loaded, namespace paths are searched in a "last in, first out" order.
 	 * @param   string   $namespace  A case sensitive Namespace to register.
 	 * @param   string   $path       A case sensitive absolute file path to the library root where classes of the given namespace can be found.
 	 * @param   boolean  $reset      True to reset the namespace with only the given lookup path.
@@ -25,7 +33,7 @@ class loader extends \JLoader {
 	 *
 	 * @since   12.3
 	 */
-	public static function registerNamespace($namespace, $path, $reset = false, $prepend = false)
+	public static function registerPsr4NamespacePrefix($namespace, $path, $reset = false, $prepend = false)
 	{
 
 		// Verify the library path exists.
@@ -35,9 +43,9 @@ class loader extends \JLoader {
 		}
 
 		// If the namespace is not yet registered or we have an explicit reset flag then set the path.
-		if (!isset(static::$namespaces[$namespace]) || $reset)
+		if (!isset(static::$psr4NamespacePrefixes[$namespace]) || $reset)
 		{
-			static::$namespaces[$namespace] = array($path);
+			static::$psr4NamespacePrefixes[$namespace] = array($path);
 		}
 
 		// Otherwise we want to simply add the path to the namespace.
@@ -45,11 +53,11 @@ class loader extends \JLoader {
 		{
 			if ($prepend)
 			{
-				array_unshift(self::$namespaces[$namespace], $path);
+				array_unshift(static::$psr4NamespacePrefixes[$namespace], $path);
 			}
 			else
 			{
-				static::$namespaces[$namespace][] = $path;
+				static::$psr4NamespacePrefixes[$namespace][] = $path;
 			}
 		}
 	}
@@ -63,7 +71,7 @@ class loader extends \JLoader {
 	 *
 	 * @since   13.1
 	 */
-	public static function loadByPsr0($class)
+	public static function loadByPsr4($class)
 	{
 		// Remove the root backslash if present.
 		if ($class[0] == '\\')
@@ -72,24 +80,29 @@ class loader extends \JLoader {
 		}
 
 		// Loop through registered namespaces until we find a match.
-		foreach (static::$namespaces as $ns => $paths)
+		foreach (static::$psr4NamespacePrefixes as $nsPrefix => $prefixPaths)
 		{
-			if (strpos($class, $ns) === 0)
+			if (strpos($class, $nsPrefix) === 0)
 			{
-				$localClassname = substr($class, strlen($ns));
-				$localClassname = str_replace('\\', DIRECTORY_SEPARATOR, $localClassname);
+
+
+				// Strip the namespace prefix
+				$localClassName = substr($class, strlen($nsPrefix));
+
+				// Convert namespace slashes to directory slashes
+				$localClassPath = str_replace('\\', DIRECTORY_SEPARATOR, $localClassName);
 
 
 
 				// Loop through paths registered to this namespace until we find a match.
-				foreach ($paths as $path)
+				foreach ($prefixPaths as $prefixPath)
 				{
-					$localClassPath = $path .str_replace('_', DIRECTORY_SEPARATOR, $localClassname) . '.php';
+					$fullClassPath = $prefixPath . $localClassPath . '.php';
 
 					// We check for class_exists to handle case-sensitive file systems
-					if (file_exists($localClassPath) && !class_exists($class, false))
+					if (file_exists($fullClassPath) && !class_exists($class, false))
 					{
-						return (bool) include_once $localClassPath;
+						return (bool) include_once $fullClassPath;
 					}
 				}
 			}
@@ -125,6 +138,8 @@ class loader extends \JLoader {
 			// Register the PSR-0 based autoloader.
 			spl_autoload_register(array($loaderClassname, 'loadByPsr0'));
 			spl_autoload_register(array($loaderClassname, 'loadByAlias'));
+			// Register the PSR-4 based autoloader.
+			spl_autoload_register(array($loaderClassname, 'loadByPsr4'));
 		}
 	}
 } 

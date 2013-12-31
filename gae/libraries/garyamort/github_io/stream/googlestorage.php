@@ -13,26 +13,12 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
-/**
  * A user space stream wrapper for reading and writing to Google Cloud Storage.
  *
  * See: http://www.php.net/manual/en/class.streamwrapper.php
  *
  */
-
-namespace gmort\appengine\ext\cloud_storage_streams;
-
-require_once 'google/appengine/api/cloud_storage/CloudStorageTools.php';
-require_once 'google/appengine/ext/cloud_storage_streams/CloudStorageClient.php';
-require_once 'google/appengine/ext/cloud_storage_streams/CloudStorageDeleteClient.php';
-require_once 'google/appengine/ext/cloud_storage_streams/CloudStorageDirectoryClient.php';
-require_once 'google/appengine/ext/cloud_storage_streams/CloudStorageReadClient.php';
-require_once 'google/appengine/ext/cloud_storage_streams/CloudStorageRenameClient.php';
-require_once 'google/appengine/ext/cloud_storage_streams/CloudStorageUrlStatClient.php';
-require_once 'google/appengine/ext/cloud_storage_streams/CloudStorageWriteClient.php';
-require_once 'google/appengine/util/array_util.php';
-require_once 'google/appengine/ext/cloud_storage_streams/CloudStorageStreamWrapper.php';
+namespace garyamort\github_io\stream;
 
 
 use google\appengine\api\cloud_storage\CloudStorageTools;
@@ -45,14 +31,13 @@ use google\appengine\ext\cloud_storage_streams\CloudStorageReadClient;
 use google\appengine\ext\cloud_storage_streams\CloudStorageWriteClient;
 use google\appengine\ext\cloud_storage_streams\CloudStorageDeleteClient;
 use google\appengine\ext\cloud_storage_streams\CloudStorageUrlStatClient;
-
 /**
  * Allowed stream_context options.
  * "anonymous": Boolean, if set then OAuth tokens will not be generated.
  * "acl": The ACL to apply when creating an object.
  * "Content-Type": The content type of the object being written.
  */
-final class CloudStorageStreamWrapper   {
+class googlestorage   {
 
   // The client instance that we're using to communicate with GS.
   private $client;
@@ -66,7 +51,41 @@ final class CloudStorageStreamWrapper   {
   private static $valid_read_modes = ['r', 'rb', 'rt'];
   private static $valid_write_modes = ['w', 'wb', 'wt', 'a'];
 
-  /**
+
+  static public $types = array('gggs');
+
+	static public function registerWrapper($types = false, $force = false)
+	{
+		if (!$types)
+		{
+			$types = static::$types;
+		}
+
+		$streamProtocols = stream_get_wrappers();
+
+		foreach ($types as $type)
+		{
+			if (in_array($type, $streamProtocols))
+			{
+				// If force is set, unregister existing wraooer
+				if ($force)
+				{
+					//todo: error checking and message set
+					stream_wrapper_unregister($type);
+				} else
+				{
+					// otherwise skip stream processing
+					continue;
+				}
+			}
+			$streamWrapperClass = get_called_class();
+
+			stream_wrapper_register($type, $streamWrapperClass)
+			or die("Failed to register protocol $type using $streamWrapperClass");
+		}
+		}
+
+		/**
    * Constructs a new stream wrapper.
    */
   public function __construct() {
@@ -266,20 +285,29 @@ final class CloudStorageStreamWrapper   {
     } else if (in_array($mode, self::$valid_write_modes)) {
 
 		// for append mode, we need to get the existing data first
-		if ($mode = 'a')
+		if ($mode == 'a')
 		{
-			$oldData = '';
-			if (is_readable($path))
-			{
-				$oldData = file_get_contents($path);
-			}
+			$fileSize = filesize($path);
+			// It is not possible to fopen a stream that is in the process of being opened, so instead we need to use the CloudStorage API directly
+			$readClient = new CloudStorageReadClient($bucket,
+				$object,
+				$this->context);
+			$oldData = $readClient->read($fileSize);
+			$readClient->close();
+			unset($readClient);
 		}
       $this->client = new CloudStorageWriteClient($bucket,
                                                   $object,
                                                   $this->context);
-		if ($mode = 'a')
+
+		if ($mode == 'a')
 		{
+
+			// Early initialize when appending
+			$return  = $this->client->initialize();
+			// now we can append the old data
 			$this->client->write($oldData);
+			return $return;
 		}
     } else {
       if (($options & STREAM_REPORT_ERRORS) != 0) {
@@ -372,7 +400,7 @@ final class CloudStorageStreamWrapper   {
     if ($url_parts === false) {
       return false;
     }
-    if ($url_parts['scheme'] !== 'gs' || empty($url_parts['host'])) {
+    if ($url_parts['scheme'] !== 'gggs' || empty($url_parts['host'])) {
       trigger_error(sprintf("Invalid Google Cloud Storage path: %s", $path),
                     E_USER_ERROR);
       return false;

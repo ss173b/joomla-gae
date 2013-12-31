@@ -210,7 +210,7 @@ abstract class wrapper
 		return $this->initializeStream();
 	}
 
-	public function stream_urlstat($pathname, $flags)
+	public function url_stat($pathname, $flags)
 	{
 		$this->initializeStream();
 		// Stating returns an array instead of a boolean
