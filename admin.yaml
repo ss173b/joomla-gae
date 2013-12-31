@@ -1,7 +1,7 @@
 application: overnumerousness-site
 
 # Module configuration
-module: default
+module: admin
 
 # arbitrary string used to identify version
 version: overnumerousness-site
@@ -16,6 +16,7 @@ api_version: 1
 threadsafe: true
 
 
+
 # Instance Configuration
 
 ## Type of instance, F1 is the smallest
@@ -25,12 +26,13 @@ instance_class: F1
 automatic_scaling:
 # Number of instances to have always running
   min_idle_instances: 0
-# Maximum number of instances, default is automatic/980
+# Maximum number of instances, default is automatic
   max_idle_instances: 2
 # Minimum latency to trigger scaling, default is automatic
   min_pending_latency: automatic
 # Maximumlatency to force scaling trigger, default is automatic
   max_pending_latency: 30ms
+
 
 #handlers:
 # Regular expression of uri to match for this script
@@ -57,8 +59,7 @@ includes:
 - gae/app.yaml.d/apc.yaml
 # phpinfo page
 - gae/app.yaml.d/test.yaml
-# stream testing
-- gae/app.yaml.d/stream.yaml
+
 
 ##Joomla pages
 # joomla install
