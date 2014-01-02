@@ -95,7 +95,7 @@ class JCacheStorageGaeapc extends JCacheStorageApc
 	public function store($id, $group, $data)
 	{
 		$cache_id = $this->_getCacheId($id, $group);
-		return apc_store($cache_id, $data, $this->_lifetime);
+		return apc_store($cache_id, $data, $this->_lifetime * 60);
 	}
 
 	/**

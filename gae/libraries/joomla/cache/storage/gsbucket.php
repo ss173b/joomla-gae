@@ -110,7 +110,7 @@ class JCacheStorageGsbucket extends JCacheStorage
 			"Cache-Control" => $cacheControl,
 			"enable_cache" => true,
 			"enable_optimistic_cache" => true,
-			"read_cache_expiry_seconds" => $this->_lifetime,
+			"read_cache_expiry_seconds" => $this->_lifetime * 60,
 			"metadata"=> $metadata
 								]];
 		$this->filectx = stream_context_create($options);
@@ -118,7 +118,7 @@ class JCacheStorageGsbucket extends JCacheStorage
 		$options = [ "gs" => [
 			"enable_cache" => true,
 			"enable_optimistic_cache" => true,
-			"read_cache_expiry_seconds" => $this->_lifetime,
+			"read_cache_expiry_seconds" => $this->_lifetime * 60,
 		]];
 		$this->dirctx = stream_context_create($options);
 
