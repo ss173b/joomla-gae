@@ -80,7 +80,7 @@ class JCacheStorageGsbucket extends JCacheStorage
 	 */
 	protected function _getCacheId($id, $group)
 	{
-		$name = $this->_application . '-' . $id . '-' . $this->_language;
+		$name = md5($this->_application . '-' . $id . '-' . $this->_language);
 		$this->rawname =  $name;
 		$cacheId =  $name;
 
