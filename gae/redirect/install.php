@@ -4,5 +4,5 @@
  * go to index.php
  */
 
-$redirectUri = '/installation/index.php';
+$redirectUri = '/installation/';
 header( 'Location: '.$redirectUri ) ;

@@ -2,25 +2,11 @@
 
 handlers:
 
-
-# Match http://domain/installation or http://domain/installation/
-# and redirect them to the index.php route
-- url: (/)?
-# Path to script to execute for this uri
-  script: gae/redirect/site.php
-# Use HTTPS: never, always, or optional
-  secure: never
-# Google App Logon config: optional, required, admin [required and must be app admin]
-  login: optional
-
-
 # Match http://domain/index.php with possible SEF and/or query params
-- url: /index.php(/.*)?(\?.*)?
+- url: /(.+)?/?
 # Path to script to execute for this uri
   script: gae/joomla/site.php
 # Use HTTPS: never, always, or optional
   secure: never
 # Google App Logon config: optional, required, admin [required and must be app admin]
   login: optional
-
-
