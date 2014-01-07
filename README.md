@@ -4,7 +4,7 @@ joomla-gae
 GAE configuration and installation information for installation, deployment, and maintenance of the Joomla! CMS on the Google App Engine Platform
 
 
-Joomla based Installation utility for installing/managing a Google App Engine deployment of the Joomla! CMS
+MY own personal website
 
 
 ==========
