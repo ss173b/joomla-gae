@@ -1,7 +1,18 @@
+
 joomla-gae
 ==========
 
 GAE configuration and installation information for installation, deployment, and maintenance of the Joomla! CMS on the Google App Engine Platform
+
+
+Work in progress, repository branches are as follows:
+
+Master: eventual home of master info, now just notes
+Overnumerousness: home for my own personal website where I'm testing Joomla and GAE
+Installation: home of GAE installation utility
+
+
+expInstallation: experimental feature branch for working with installation
 
 
 ==========
