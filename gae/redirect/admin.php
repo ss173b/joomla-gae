@@ -4,6 +4,6 @@
  * go to index.php
  */
 
-$redirectUri = '/administrator/index.php';
+$redirectUri = '/administrator/';
 header( 'Location: '.$redirectUri ) ;
 

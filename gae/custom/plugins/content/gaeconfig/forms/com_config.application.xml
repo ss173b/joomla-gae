@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form>
 
+    <fieldset
+            name="seo"
+            label="CONFIG_SEO_SETTINGS_LABEL">
+        <field name="live_site" type="hidden" default="/" />
+    </fieldset>
 
     <fieldset
             name="database"

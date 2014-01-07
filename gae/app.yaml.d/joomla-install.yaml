@@ -5,7 +5,7 @@ handlers:
 
 # Match http://domain/installation or http://domain/installation/
 # and redirect them to the index.php route
-- url: /installation(/)?
+- url: /installation
 # Path to script to execute for this uri
   script: gae/redirect/install.php
 # Use HTTPS: never, always, or optional
@@ -15,7 +15,7 @@ handlers:
 
 
 # Match http://domain/installation/index.php with possible SEF and/or query params
-- url: /installation/index.php(/.*)?(\?.*)?
+- url: /installation(.+)?/?
 # Path to script to execute for this uri
   script: gae/joomla/install.php
 # Use HTTPS: never, always, or optional

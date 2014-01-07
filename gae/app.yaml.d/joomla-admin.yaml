@@ -5,7 +5,7 @@ handlers:
 
 # Match http://domain/administrator or http://domain/administrator/
 # and redirect them to the index.php route
-- url: /administrator(/)?
+- url: /administrator
 # Path to script to execute for this uri
   script: gae/redirect/admin.php
 # Use HTTPS: never, always, or optional
@@ -15,7 +15,7 @@ handlers:
 
 
 # Match http://domain/administrator/index.php with possible SEF and/or query params
-- url: /administrator/index.php(/.*)?(\?.*)?
+- url: /administrator(.+)?/?
 # Path to script to execute for this uri
   script: gae/joomla/admin.php
 # Use HTTPS: never, always, or optional
