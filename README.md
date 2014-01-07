@@ -8,6 +8,7 @@ GAE configuration and installation information for installation, deployment, and
 Work in progress, repository branches are as follows:
 
 Master: eventual home of master info, now just notes
+Site: Testing code for executing Joomla under GAE
 Overnumerousness: home for my own personal website where I'm testing Joomla and GAE
 Installation: home of GAE installation utility
 
